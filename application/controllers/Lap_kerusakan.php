@@ -3,6 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Lap_kerusakan extends CI_Controller {
 
+	public function __construct()
+	{
+		parent::__construct();
+		//Do your magic here
+		cek_session_user();
+	}
+
 	public function index()
 	{
 		$data['title'] = 'Laporan Kerusakan';
@@ -15,6 +22,21 @@ class Lap_kerusakan extends CI_Controller {
 				WHERE a.`sts_selesai` = 'N' ORDER BY a.`id_kerusakanalat` DESC";
 		$data['record'] = $this->db->query($qu)->result_array();
 		$this->template->load('@bima_coding/template','@bima_coding/mod_master_kerusakanalat/view',$data);
+	}
+
+	public function view_user()
+	{
+		$id = $this->session->userdata('id');
+		$data['title'] = 'Laporan Kerusakan';
+		$qu = "SELECT * FROM t_kerusakanalat a 
+				LEFT JOIN t_inv b ON a.`id_inv`= b.`id_inv`
+				LEFT JOIN t_alat c ON b.`id_alat`= c.`id_alat`
+				LEFT JOIN t_merk d ON c.`id_merk` = d.`id_merk`
+				LEFT JOIN t_distributor e ON b.`id_distributor` = e.`id_distributor`
+				LEFT JOIN t_lokasi f ON b.`id_lokasi` = f.`id_lokasi`
+				WHERE a.`sts_selesai` != '' AND a.`id_users` = '".$id."' ORDER BY a.`id_kerusakanalat` DESC";
+		$data['record'] = $this->db->query($qu)->result_array();
+		$this->template->load('@bima_coding/template','@bima_coding/mod_master_kerusakanalat/user_view',$data);
 	}
 
 	function tambah_kerusakan()

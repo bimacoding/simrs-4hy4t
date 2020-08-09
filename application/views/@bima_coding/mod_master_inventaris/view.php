@@ -13,7 +13,10 @@
             <?=$title?>
             <div class="float-right">
                 <a href="<?=base_url().'inventaris/cetak_inventaris'?>" class="badge badge-success">Cetak</a>
-                <a href="<?=base_url().'inventaris/tambah_inventaris'?>" class="badge badge-primary ">Tambah</a>
+                <?php if ($this->session->userdata('level')=='admin') { ?>
+                    <a href="<?=base_url().'inventaris/tambah_inventaris'?>" class="badge badge-primary ">Tambah</a>
+                <?php } ?>
+                
             </div>
         </h3>
         
@@ -41,7 +44,9 @@
                         <th style="width: 100px;">Operating Manual</th>
                         <th style="width: 100px;">Manual Book</th>
                         <th>QR Code</th>
+                        <?php if ($this->session->userdata('level')=='admin') { ?>
                         <th style="width: 50px">Aksi</th>
+                        <?php   } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,6 +75,7 @@
                             <td style="width: 100px;"><?=$row['buku_op']?></td>
                             <td style="width: 100px;"><?=$row['buku_manual']?></td>
                             <td style="width: 100px;"><?=$row['qrcode']?></td>
+                            <?php if ($this->session->userdata('level')=='admin') { ?>
                             <td>
                                 <center>
                                     <a href="<?=base_url().'inventaris/ubah_inventaris/'.$row['id_inv'];?>" class="badge badge-success">
@@ -80,6 +86,7 @@
                                     </a>
                                 </center>
                             </td>
+                            <?php } ?>
                         </tr>
                     <?php
                         $no++;    # code...

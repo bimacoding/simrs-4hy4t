@@ -34,7 +34,9 @@
                         <th>Keterangan</th>
                         <th>Service Report</th>
                         <th>Lampiran</th>
+                        <?php if ($this->session->userdata('level')=='admin') { ?>
                         <th style="width: 100px">Aksi</th>
+                    <?php   } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,6 +67,7 @@
                             <td><?=$row['ket']?></td>
                             <td><a href="<?= base_url().'datapemeliharaan/service_report/'.$row['id_pemeliharaan'] ?>">view report</a></td>
                             <td><a href="<?=base_url().'assets/uploads/dokumen/'.$row['service_report'] ?>"><?=$row['service_report']?></a></td>
+                            <?php if ($this->session->userdata('level')=='admin') { ?>
                             <td>
                                 <center>
                                     <a href="<?=base_url().'datapemeliharaan/ubah_datapemeliharaan/'.$row['id_pemeliharaan'];?>" class="badge badge-success">
@@ -75,6 +78,7 @@
                                     </a>
                                 </center>
                             </td>
+                        <?php   } ?>
                         </tr>
                     <?php
                         $no++;    # code...

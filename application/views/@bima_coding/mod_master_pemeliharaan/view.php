@@ -13,7 +13,9 @@
             <?=$title?>
             <div class="float-right">
                 <a href="<?=base_url().'pemeliharaan/cetak_pemeliharaan'?>" class="badge badge-success">Cetak</a>
+                <?php if ($this->session->userdata('level')=='admin') { ?>
                 <a href="<?=base_url().'pemeliharaan/tambah_pemeliharaan'?>" class="badge badge-primary">Tambah</a>
+                <?php  } ?>
             </div>
         </h3>
         
@@ -32,7 +34,9 @@
                         <th>Jadwal 1</th>
                         <th>Jadwal 2</th>
                         <th>Jadwal 3</th>
+                        <?php if ($this->session->userdata('level')=='admin') { ?>
                         <th style="width: 100px">Aksi</th>
+                        <?php   } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,6 +56,7 @@
                             <td><?=$row['tgl_pm']?></td>
                             <td><?=$row['tgl_pm2']?></td>
                             <td><?=$row['tgl_pm3']?></td>
+                            <?php if ($this->session->userdata('level')=='admin') { ?>
                             <td>
                                 <center>
                                     <a href="<?=base_url().'pemeliharaan/ubah_pemeliharaan/'.$row['id_pemeliharaan'];?>" class="badge badge-success">
@@ -66,6 +71,7 @@
                                     </a>
                                 </center>
                             </td>
+                        <?php   } ?>
                         </tr>
                     <?php
                         $no++;    # code...

@@ -5,6 +5,7 @@ class Pemeliharaan extends CI_Controller {
 
 	public function index()
 	{
+		cek_session_user();
 		$data['title'] = 'Jadwal pemeliharaan';
 		$data['record'] = $this->db->query("SELECT * FROM t_jadwalpemeliharaan bb 
 											LEFT JOIN t_inv a ON bb.id_inv = a.id_inv
@@ -20,6 +21,7 @@ class Pemeliharaan extends CI_Controller {
 
 	function tambah_pemeliharaan()
 	{
+		cek_session_user();
 		if (isset($_POST['submit'])) {
 			$tgl_pm2 = date('Y-m-d', strtotime('+6 months', strtotime($this->input->post('jadwal_pemeliharaan'))) );
 			$tgl_pm3 = date('Y-m-d', strtotime('+1 year', strtotime($this->input->post('jadwal_pemeliharaan'))) );
@@ -56,6 +58,7 @@ class Pemeliharaan extends CI_Controller {
 
 	function ubah_pemeliharaan()
 	{
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		if (isset($_POST['submit'])) {
 			$tgl_pm2 = date('Y-m-d', strtotime('+6 months', strtotime($this->input->post('jadwal_pemeliharaan'))) );
@@ -95,6 +98,7 @@ class Pemeliharaan extends CI_Controller {
 
 	function update_pemeliharaan()
 	{
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		if (isset($_POST['submit'])) {
 			$config['upload_path'] = 'assets/uploads/dokumen';
@@ -156,7 +160,7 @@ class Pemeliharaan extends CI_Controller {
 
 	function hapus_pemeliharaan()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		$data = array('id_pemeliharaan'=>$id);
 		$q = $this->model_app->delete('t_jadwalpemeliharaan',$data);
@@ -173,6 +177,7 @@ class Pemeliharaan extends CI_Controller {
 
 	function cetak_pemeliharaan()
 	{
+		cek_session_user();
 		$data['title'] = 'Cetak pemeliharaan';
 		$data['record'] = $this->db->query("SELECT * FROM t_jadwalpemeliharaan bb 
 											LEFT JOIN t_inv a ON bb.id_inv = a.id_inv

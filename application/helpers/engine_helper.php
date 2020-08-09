@@ -94,7 +94,7 @@
     function cek_session_user(){
         $ci = & get_instance();
         $session = $ci->session->userdata('level');
-        if ($session != 'user'){
+        if ($session == ''){
             redirect(base_url());
         }
     }

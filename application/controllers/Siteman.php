@@ -7,7 +7,7 @@ class Siteman extends CI_Controller {
 	{
 		parent::__construct();
 		//Do your magic here
-		// cek_session_admin();
+		// cek_session_user();
 		// $this->load->model('model_app');
 	}
 
@@ -85,7 +85,8 @@ class Siteman extends CI_Controller {
 
 	function home()
 	{
-		// cek_session_admin();
+		// cek_session_user();
+		cek_session_user();
 		$data['title'] = "Dashboard admin";
 		$this->template->load('@bima_coding/template','@bima_coding/main',$data);
 	}
@@ -93,7 +94,7 @@ class Siteman extends CI_Controller {
 	function scan_qr()
 	{
 		// 
-		cek_session_admin();
+		cek_session_user();
 		$data['title'] = "Scan QR code";
 		$this->template->load('@bima_coding/template','@bima_coding/scanQR',$data);
 	}
@@ -101,7 +102,7 @@ class Siteman extends CI_Controller {
 	function scanner()
 	{
 		// 
-		cek_session_admin();
+		cek_session_user();
 		$data['title'] = "Scan Alat";
 		$this->template->load('@bima_coding/template','@bima_coding/scanner',$data);
 	}
@@ -136,14 +137,14 @@ class Siteman extends CI_Controller {
 
 	function download($file)
 	{
-		cek_session_admin();
+		cek_session_user();
 		$this->load->helper('download');
 		force_download('assets/uploads/'.$file , NULL);
 	}
 
 	function merk()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$data['title'] = 'Data Merk';
 		$data['record'] = $this->model_app->view_ordering('t_merk','id_merk','DESC');
 		$this->template->load('@bima_coding/template','@bima_coding/mod_master_merk/view',$data);
@@ -151,7 +152,7 @@ class Siteman extends CI_Controller {
 
 	function tambah_merk()
 	{
-		cek_session_admin();
+		cek_session_user();
 		if (isset($_POST['submit'])) {
 			$data = array(
 						'nama_merk' => $this->db->escape_str($this->input->post('merk'))
@@ -175,7 +176,7 @@ class Siteman extends CI_Controller {
 
 	function ubah_merk()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		if (isset($_POST['submit'])) {
 			$data = array(
@@ -202,7 +203,7 @@ class Siteman extends CI_Controller {
 
 	function hapus_merk()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		$data = array('id_merk'=>$id);
 		$q = $this->model_app->delete('t_merk',$data);
@@ -219,7 +220,7 @@ class Siteman extends CI_Controller {
 
 	function kondisi()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$data['title'] = 'Data kondisi';
 		$data['record'] = $this->model_app->view_ordering('t_kondisi','id_kondisi','DESC');
 		$this->template->load('@bima_coding/template','@bima_coding/mod_master_kondisi/view',$data);
@@ -227,7 +228,7 @@ class Siteman extends CI_Controller {
 
 	function tambah_kondisi()
 	{
-		cek_session_admin();
+		cek_session_user();
 		if (isset($_POST['submit'])) {
 			$data = array(
 						'nama_kondisi' => $this->db->escape_str($this->input->post('kondisi'))
@@ -251,7 +252,7 @@ class Siteman extends CI_Controller {
 
 	function ubah_kondisi()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		if (isset($_POST['submit'])) {
 			$data = array(
@@ -278,7 +279,7 @@ class Siteman extends CI_Controller {
 
 	function hapus_kondisi()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		$data = array('id_kondisi'=>$id);
 		$q = $this->model_app->delete('t_kondisi',$data);
@@ -295,7 +296,7 @@ class Siteman extends CI_Controller {
 
 	function lokasi()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$data['title'] = 'Data lokasi';
 		$data['record'] = $this->model_app->view_ordering('t_lokasi','id_lokasi','DESC');
 		$this->template->load('@bima_coding/template','@bima_coding/mod_master_lokasi/view',$data);
@@ -303,7 +304,7 @@ class Siteman extends CI_Controller {
 
 	function tambah_lokasi()
 	{
-		cek_session_admin();
+		cek_session_user();
 		if (isset($_POST['submit'])) {
 			$data = array(
 						'nama_lokasi' => $this->db->escape_str($this->input->post('lokasi'))
@@ -327,7 +328,7 @@ class Siteman extends CI_Controller {
 
 	function ubah_lokasi()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		if (isset($_POST['submit'])) {
 			$data = array(
@@ -354,7 +355,7 @@ class Siteman extends CI_Controller {
 
 	function hapus_lokasi()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		$data = array('id_lokasi'=>$id);
 		$q = $this->model_app->delete('t_lokasi',$data);
@@ -371,7 +372,7 @@ class Siteman extends CI_Controller {
 
 	function distributor()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$data['title'] = 'Data Distributor';
 		$data['record'] = $this->model_app->view_ordering('t_distributor','id_distributor','DESC');
 		$this->template->load('@bima_coding/template','@bima_coding/mod_master_distributor/view',$data);
@@ -379,7 +380,7 @@ class Siteman extends CI_Controller {
 
 	function tambah_distributor()
 	{
-		cek_session_admin();
+		cek_session_user();
 		if (isset($_POST['submit'])) {
 			$data = array(
 						'nama' => $this->db->escape_str($this->input->post('nama')),
@@ -411,7 +412,7 @@ class Siteman extends CI_Controller {
 
 	function ubah_distributor()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		if (isset($_POST['submit'])) {
 			$data = array(
@@ -446,7 +447,7 @@ class Siteman extends CI_Controller {
 
 	function hapus_distributor()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		$data = array('id_distributor'=>$id);
 		$q = $this->model_app->delete('t_distributor',$data);
@@ -463,7 +464,7 @@ class Siteman extends CI_Controller {
 
 	function supplier()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$data['title'] = 'Data supplier';
 		$data['record'] = $this->model_app->view_ordering('t_supplier','id_supplier','DESC');
 		$this->template->load('@bima_coding/template','@bima_coding/mod_master_supplier/view',$data);
@@ -471,7 +472,7 @@ class Siteman extends CI_Controller {
 
 	function tambah_supplier()
 	{
-		cek_session_admin();
+		cek_session_user();
 		if (isset($_POST['submit'])) {
 			$data = array(
 						'nama' => $this->db->escape_str($this->input->post('nama')),
@@ -503,7 +504,7 @@ class Siteman extends CI_Controller {
 
 	function ubah_supplier()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		if (isset($_POST['submit'])) {
 			$data = array(
@@ -538,7 +539,7 @@ class Siteman extends CI_Controller {
 
 	function hapus_supplier()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		$data = array('id_supplier'=>$id);
 		$q = $this->model_app->delete('t_supplier',$data);
@@ -555,7 +556,7 @@ class Siteman extends CI_Controller {
 
 	function alat()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$data['title'] = 'Data alat';
 		$data['record'] = $this->model_app->view_join_one('t_alat','t_merk','id_merk','id_alat','DESC');
 		$this->template->load('@bima_coding/template','@bima_coding/mod_master_alat/view',$data);
@@ -563,7 +564,7 @@ class Siteman extends CI_Controller {
 
 	function tambah_alat()
 	{
-		cek_session_admin();
+		cek_session_user();
 		if (isset($_POST['submit'])) {
 			$data = array(
 						'id_merk' => $this->db->escape_str($this->input->post('id_merk')),
@@ -591,7 +592,7 @@ class Siteman extends CI_Controller {
 
 	function ubah_alat()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		if (isset($_POST['submit'])) {
 			$data = array(
@@ -622,7 +623,7 @@ class Siteman extends CI_Controller {
 
 	function hapus_alat()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		$data = array('id_alat'=>$id);
 		$q = $this->model_app->delete('t_alat',$data);
@@ -639,7 +640,7 @@ class Siteman extends CI_Controller {
 
 	function jenis()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$data['title'] = 'Data Jenis';
 		$data['record'] = $this->model_app->view_ordering('t_jenis','id_jenis','DESC');
 		$this->template->load('@bima_coding/template','@bima_coding/mod_master_jenis/view',$data);
@@ -647,7 +648,7 @@ class Siteman extends CI_Controller {
 
 	function tambah_jenis()
 	{
-		cek_session_admin();
+		cek_session_user();
 		if (isset($_POST['submit'])) {
 			$data = array(
 						'inisial' => $this->db->escape_str($this->input->post('inisial')),
@@ -672,7 +673,7 @@ class Siteman extends CI_Controller {
 
 	function ubah_jenis()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		if (isset($_POST['submit'])) {
 			$data = array(
@@ -700,7 +701,7 @@ class Siteman extends CI_Controller {
 
 	function hapus_jenis()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$id = $this->uri->segment(3);
 		$data = array('id_jenis'=>$id);
 		$q = $this->model_app->delete('t_jenis',$data);
@@ -717,7 +718,7 @@ class Siteman extends CI_Controller {
 
 	function icon()
 	{
-		cek_session_admin();
+		cek_session_user();
 		$data['title'] = 'Dokumentasi Icon';
 		$this->template->load('@bima_coding/template','@bima_coding/dokumentasi',$data);
 	}
