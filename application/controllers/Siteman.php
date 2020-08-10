@@ -109,9 +109,30 @@ class Siteman extends CI_Controller {
 
 	function history_inv()
 	{
-		$kd = $this->uri->segment(3);
-		$data['title'] = "Riwayat Alat";
-		$qry = $this->db->query("SELECT * FROM t_datapemeliharaan bb 
+		$noinv = $this->uri->segment(3);
+		$sql = "SELECT * FROM t_inv WHERE noinv = '".$noinv."'";
+		$quw = $this->db->query($sql)->row_array();
+		$id = $quw['id_inv'];
+		if (isset($_POST['submit'])){
+			$data = array(
+						'id_inv' => $this->db->escape_str($this->input->post('idnya')),
+						'keluhan' => cetak($this->input->post('keluhan')),
+						'sts_selesai' => 'N',
+						'tgl_buat' => date('Y-m-d'),
+						'jam_buat' => date('H:i:s'),
+						'id_users' => $this->session->userdata('id')
+					);
+			$q = $this->model_app->insert('t_kerusakanalat',$data);
+			if ($q) {
+				$this->session->set_flashdata('success', 'Data berhasil diproses!');
+				logAct($this->session->userdata('id'),'Tambah kerusakan',$this->input->post('id_inv'));
+				redirect('lap_kerusakan/view_user','refresh');
+			}else{
+				$this->session->set_flashdata('error', 'Data gagal diproses!');
+				redirect('lap_kerusakan/view_user','refresh');
+			}
+		}else{
+			$qry = $this->db->query("SELECT * FROM t_datapemeliharaan bb 
 								LEFT JOIN t_inv a ON bb.id_inv = a.id_inv
 								LEFT JOIN t_jenis ff ON bb.id_jenis = ff.id_jenis
 								LEFT JOIN t_alat b ON a.`id_alat`= b.`id_alat`
@@ -119,12 +140,28 @@ class Siteman extends CI_Controller {
 								LEFT JOIN t_distributor c ON a.`id_distributor` = c.id_distributor
 								LEFT JOIN t_lokasi d ON a.id_lokasi = d.id_lokasi
 								LEFT JOIN t_kondisi e ON a.id_kondisi = e.id_kondisi 
-								WHERE a.noinv = '".$kd."'
+								WHERE a.id_inv = '".$id."'
 								ORDER BY bb.id_pemeliharaan DESC");
-		// print_r($qry);
-		$data['record'] = $qry;
-		$data['rowx'] = $qry->row_array();
-		$this->template->load('@bima_coding/template','@bima_coding/history',$data);
+			$data = array(
+				'title' 		=> 'Detil Data Alat',
+				'kondisi'		=> $this->model_app->view_ordering('t_kondisi','id_kondisi','DESC'),
+				'lokasi'		=> $this->model_app->view_ordering('t_lokasi','id_lokasi','DESC'),
+				'alat'			=> $this->model_app->view_ordering('t_alat','id_alat','DESC'),
+				'distributor'	=> $this->model_app->view_ordering('t_distributor','id_distributor','DESC'),
+				'row'			=> $this->model_app->edit('t_inv',array('id_inv'=>$id))->row_array(),
+				'record'		=> $qry,
+				'rowx'			=> $qry->row_array(),
+				'idnya' 		=> $id
+			);
+			$this->template->load('@bima_coding/template','@bima_coding/history',$data);
+		}
+		// $kd = $this->uri->segment(3);
+		// $data['title'] = "Riwayat Alat";
+		
+		// // print_r($qry);
+		// $data['record'] = $qry;
+		// $data['rowx'] = $qry->row_array();
+		
 	}
 
 	

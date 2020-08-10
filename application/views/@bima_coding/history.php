@@ -1,56 +1,892 @@
-<div class="container">
-    <div class="col-md-12 col-lg-4 col-sm-12">
-        <div class="white-box">
-            
+<?php   if ($this->session->userdata('level')=='admin') { ?>
+
+    <div class="container">
+        <div class="col-md-12 col-lg-5 col-sm-12">
+            <div class="white-box">
+                
+                <style type="text/css">
+                    .autocomplete-suggestions {
+                        border: 1px solid #999;
+                        background: #FFF;
+                        overflow: auto;
+                    }
+                    .autocomplete-suggestion {
+                        padding: 2px 5px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                    }
+                    .autocomplete-selected {
+                        background: #F0F0F0;
+                    }
+                    .autocomplete-suggestions strong {
+                        font-weight: normal;
+                        color: #3399FF;
+                    }
+                    .autocomplete-group {
+                        padding: 2px 5px;
+                    }
+                    .autocomplete-group strong {
+                        display: block;
+                        border-bottom: 1px solid #000;
+                    }
+                    .ajax-file-upload{
+                        cursor:pointer;
+                        width: 100%;
+                        height: 30px;
+                        text-align: center;
+                        top: 2px;
+                        font-size: 10px;
+                        line-height: 23px;
+                    }
+
+                    .ajax-file-upload-green
+                    {
+                        background-color: #188601;
+                        display: inline-block;
+                        color: #fff;
+                        font-size: 12px;
+                        padding: 1px 12px;
+                        cursor: pointer;
+                        margin-right: 5px;
+                        float: right;
+                    }
+
+                    .ajax-upload-dragdrop > span
+                    {
+                        display: none;
+                    }
+
+                    .ajax-file-upload-statusbar{
+                        display: inline;
+                    }
+
+                    .ajax-upload-dragdrop{
+                        padding: 0px 4px 0px 4px;
+                        width: 100%
+                    }
+                    .ajax-upload-dragdrop span:first-of-type{
+                        float: right; margin-top: 5px;
+                    }
+                    .ajax-file-upload-preview{
+                        display: inline;
+                        float: left;
+                    }
+                    .form-sm .ajax-file-upload
+                    {
+                        width: 100%;
+                    }
+                </style>
+                <div class="col-sm-12">
+                    <div class="white-box">
+                        <h3 class="box-title m-b-0"><?=$title?></h3>
+                        <p class="text-muted m-b-30 font-13"> Pastikan semua kolom terisi. </p>
+                        <?php $attributes = array('class'=>'form-horizontal','role'=>'form','autocomplete'=>'off'); echo form_open_multipart('inventaris/ubah_inventaris',$attributes); ?>
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">Nama alat</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <input class="form-control" type="hidden" id="kode_alat" name="kode_alat">
+                                    <select class="form-control" name="id_alat" onchange="alat(this.id)" id="id_alat">
+                                        <option value="0">-- Pilih --</option>
+                                        <?php 
+                                            foreach ($alat as $key) {
+                                                $pilih = 'selected';
+                                                if($row['id_alat']==$key['id_alat']){
+                                                    echo "<option value='$key[id_alat]' $pilih>$key[nama_alat]</option>";
+                                                }else{
+                                                    echo "<option value='$key[id_alat]'>$key[nama_alat]</option>";
+                                                }
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="hii" style="display:;">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">Merk</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <input class="form-control" type="text" id="merk" readonly="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row" id="hiii" style="display:;">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">Model/Tipe</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <input class="form-control" type="text" id="model_tipe" readonly="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">nama distributor</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <select class="form-control" name="id_distributor">
+                                        <option value="">-- Pilih --</option>
+                                        <?php 
+                                            foreach ($distributor as $key) {
+                                                $pilih = 'selected';
+                                                if($row['id_distributor']==$key['id_distributor']){
+                                                    echo "<option value='$key[id_distributor]' $pilih>$key[nama]</option>";
+                                                }else{
+                                                    echo "<option value='$key[id_distributor]'>$key[nama]</option>";
+                                                }
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">lokasi</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <select class="form-control" name="id_lokasi">
+                                        <option value="">-- Pilih --</option>
+                                        <?php 
+                                            foreach ($lokasi as $key) {
+                                                $pilih = 'selected';
+                                                if($row['id_lokasi']==$key['id_lokasi']){
+                                                    echo "<option value='$key[id_lokasi]' $pilih>$key[nama_lokasi]</option>";
+                                                }else{
+                                                    echo "<option value='$key[id_lokasi]'>$key[nama_lokasi]</option>";
+                                                }
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">kondisi</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <select class="form-control" name="id_kondisi">
+                                       <option value="">-- Pilih --</option> 
+                                       <?php 
+                                        foreach ($kondisi as $key) {
+                                            $pilih = 'selected';
+                                            if($row['id_kondisi']==$key['id_kondisi']){
+                                                echo "<option value='$key[id_kondisi]' $pilih>$key[nama_kondisi]</option>";
+                                            }else{
+                                                echo "<option value='$key[id_kondisi]'>$key[nama_kondisi]</option>";
+                                            }
+                                        }
+                                       ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">serial number</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <input class="form-control" type="text" name="sn_alat" value="<?=$row['sn_alat']?>">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">thn. pengadaan</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <input class="form-control" type="text" name="thn_pengadaan" value="<?=$row['thn_pengadaan']?>">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">thn. operasional</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <input class="form-control" type="text" name="thn_operasional" value="<?=$row['thn_operasional']?>">
+                                </div>
+                            </div>
+
+                            
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">usia teknis</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <input class="form-control" type="text" name="usia_teknis" value="<?=$row['usia_teknis']?>">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">harga</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <input class="form-control" type="number" name="harga" value="<?=$row['harga']?>">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">penyusutan</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <input class="form-control" type="text" name="penyusutan" value="<?=$row['penyusutan']?>">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">nilai akumulasi</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <input class="form-control" type="number" name="n_akumulasi" value="<?=$row['n_akumulasi']?>">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">nilai buku</label>
+                                <div class="col-md-12 col-sm-12 col-lg-12">
+                                    <input class="form-control" type="number" name="n_buku" value="<?=$row['n_buku']?>">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">Operational Book</label>
+                                <div class="col-sm-10">
+                                    <div id='mulitplefileuploader1'>Pilih files</div>
+                                    <div id='status'></div>
+                                    <small class="text-muted">Max (5 MB), Allowed File : pdf,xls,doc,ppt</small>
+                                </div>
+                                <span id="idoprationalbook"></span>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">Manual Book</label>
+                                <div class="col-sm-10">
+                                    <div id='mulitplefileuploader2'>Pilih files</div>
+                                    <div id='status'></div>
+                                    <small class="text-muted">Max (5 MB), Allowed File : pdf,xls,doc,ppt</small>
+                                </div>
+                                <span id="idmanualbook"></span>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-md-12 col-sm-12 col-lg-2 col-form-label">Kalibrasi</label>
+                                <div class="col-sm-10">
+                                    <div id='mulitplefileuploader'>Pilih files</div>
+                                    <div id='status'></div>
+                                    <small class="text-muted">Max (5 MB), Allowed File : pdf,xls,doc,ppt</small>
+                                </div>
+                                <span id="idkalibrasi"></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10" name="submit">Update</button>
+                            <a href="<?=base_url().'inventaris/inventaris'?>" class="btn btn-inverse waves-effect waves-light">Batal</a>
+                        <?php echo form_close(); ?>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    $(function() {
+                        var idAlat = $("#id_alat").val();
+                        $.ajax({
+                            url: '<?=base_url().'ajax/getalat'?>',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                'id_alat': idAlat 
+                            },
+                            success: function (alats) {
+                                $("#hii").show();
+                                $("#hiii").show();
+                                $("#merk").val(alats.merk);
+                                $("#kode_alat").val(alats.kode_alat);
+                                $("#model_tipe").val(alats.model_tipe);
+                            }
+                        });
+                    });
+                    function alat(){
+                        var idAlat = $("#id_alat").val();
+                        $.ajax({
+                            url: '<?=base_url().'ajax/getalat'?>',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                'id_alat': idAlat 
+                            },
+                            success: function (alats) {
+                                $("#hii").show();
+                                $("#hiii").show();
+                                $("#merk").val(alats.merk);
+                                $("#kode_alat").val(alats.kode_alat);
+                                $("#model_tipe").val(alats.model_tipe);
+                            }
+                        });
+                    };
+                </script>
+                <script type="text/javascript">
+                $(document).ready(function(){
+
+                $("#mulitplefileuploader").uploadFile({
+                    url: "<?=base_url()?>inventaris/upload_kalibrasi/",
+                    dragDrop: true,
+                    maxFileCount:1,
+                    multiple: false,
+                    fileName: "upload_kalibrasi",
+                    maxFileSize:5500*1024,
+                    allowedTypes:"pdf,doc,docx,xls,xlsx,ppt,pptx",     
+                    returnType:"json",
+                    dragdropWidth:'auto',
+                    showDone:true,
+                    showDelete:true,
+                    onSuccess: function( files, data, xhr ) {
+                       console.log(data);
+                       $('#idkalibrasi').append('<input type="hidden" name="sts_kalibrasi" value="'+data+'">');
+                    },
+                    deleteCallback: function(data,pd) 
+                    {
+                        for(var i=0;i<data.length;i++) {
+                            var str = data[i];
+                            console.log(str.replace(/[^a-z0-9]/gi, '_'));
+                            $.post("<?=base_url()?>inventaris/delete/",{op:"delete",name:data[i]},
+                            function(resp, textStatus, jqXHR) { 
+                                console.log(data);
+                            });
+                            
+                        }  
+                        console.log(data[0]); 
+                        pd.statusbar.hide();
+                    }
+                });
+
+                });
+
+                $(document).ready(function(){
+
+                $("#mulitplefileuploader1").uploadFile({
+                    url: "<?=base_url()?>inventaris/upload_book_op/",
+                    dragDrop: true,
+                    maxFileCount:1,
+                    multiple: false,
+                    fileName: "upload_book_op",
+                    maxFileSize:5500*1024,
+                    allowedTypes:"pdf,doc,docx,xls,xlsx,ppt,pptx",     
+                    returnType:"json",
+                    dragdropWidth:'auto',
+                    showDone:true,
+                    showDelete:true,
+                    onSuccess: function( files, data, xhr ) {
+                       console.log(data);
+                       $('#idoprationalbook').append('<input type="hidden" name="buku_op" value="'+data+'">');
+                    },
+                    deleteCallback: function(data,pd) 
+                    {
+                        for(var i=0;i<data.length;i++) {
+                            $.post("<?=base_url()?>inventaris/delete/",{op:"delete",name:data[i].replace(/[^a-z0-9]/gi, '_')},
+                            function(resp, textStatus, jqXHR) { 
+                                console.log(data);
+                            });
+                            
+                        }  
+                        console.log(data[0]); 
+                        pd.statusbar.hide();
+                    }
+                });
+
+                });
+
+                $(document).ready(function(){
+
+                $("#mulitplefileuploader2").uploadFile({
+                    url: "<?=base_url()?>inventaris/upload_book_manual/",
+                    dragDrop: true,
+                    maxFileCount:1,
+                    multiple: false,
+                    fileName: "upload_book_manual",
+                    maxFileSize:5500*1024,
+                    allowedTypes:"pdf,doc,docx,xls,xlsx,ppt,pptx",     
+                    returnType:"json",
+                    dragdropWidth:'auto',
+                    showDone:true,
+                    showDelete:true,
+                    onSuccess: function( files, data, xhr ) {
+                       console.log(data);
+                       $('#idmanualbook').append('<input type="hidden" name="buku_manual" value="'+data+'">');
+                    },
+                    deleteCallback: function(data,pd) 
+                    {
+                        for(var i=0;i<data.length;i++) {
+                            $.post("<?=base_url()?>inventaris/delete/",{op:"delete",name:data[i].replace(/[^a-z0-9]/gi, '_')},
+                            function(resp, textStatus, jqXHR) { 
+                                console.log(data);
+                            });
+                            
+                        }  
+                        console.log(data[0]); 
+                        pd.statusbar.hide();
+                    }
+                });
+
+                });
+
+
+
+                </script>
+
+            </div>
+        </div>
+
+        <div class="col-md-12 col-lg-7 col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title m-b-0">Riwayat Alat</h3>
+                <div class="table-responsive">
+                <table id="myTable" class="table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25px">No</th>
+                            <th>Jenis</th>
+                            <th>Jadwal Pemeliharaan</th>
+                            <th>Tanggal Pelaksanaan</th>
+                            <th>Status</th>
+                            <th>Masalah</th>
+                            <th>Analis Kerusakan</th>
+                            <th>Tindak Lanjut</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $no = 1;
+                            
+                            foreach ($record->result_array() as $row) {
+                                $style = '';
+                                if($row['status'] == 'pending'){
+                                    $style = 'background-color: #413036';
+                                }
+                        ?>
+                            <tr style="<?= $style ?>">
+                                <td><center><?=$no?></center></td>
+                                <td><?=$row['inisial']?></td>
+                                <td><?=$row['tgl_perencanaan']?></td>
+                                <td><?=$row['tgl_mulai']?></td>
+                                <td><?=$row['status']?></td>
+                                <td><?=$row['masalah']?></td>
+                                <td><?=$row['analisis_kerusakan']?></td>
+                                <td><?=$row['tindak_lanjut']?></td>
+                                <td><?=$row['ket']?></td>
+                            </tr>
+                        <?php
+                            $no++;    # code...
+                            }
+                         ?>
+                    </tbody>
+                </table>
+            </div>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-12 col-lg-8 col-sm-12">
-        <div class="white-box">
-            <h3 class="box-title m-b-0">Riwayat Alat</h3>
-            <div class="table-responsive">
-            <table id="myTable" class="table">
-                <thead>
-                    <tr>
-                        <th style="width: 25px">No</th>
-                        <th>Jenis</th>
-                        <th>Jadwal Pemeliharaan</th>
-                        <th>Tanggal Pelaksanaan</th>
-                        <th>Status</th>
-                        <th>Masalah</th>
-                        <th>Analis Kerusakan</th>
-                        <th>Tindak Lanjut</th>
-                        <th>Keterangan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        $no = 1;
-                        
-                        foreach ($record->result_array() as $row) {
-                            $style = '';
-                            if($row['status'] == 'pending'){
-                                $style = 'background-color: #413036';
+<?php }else if ($this->session->userdata('level')=='user') { ?>
+    
+    <div class="container">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="white-box">
+                <style type="text/css">
+                    .autocomplete-suggestions {
+                        border: 1px solid #999;
+                        background: #FFF;
+                        overflow: auto;
+                    }
+                    .autocomplete-suggestion {
+                        padding: 2px 5px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                    }
+                    .autocomplete-selected {
+                        background: #F0F0F0;
+                    }
+                    .autocomplete-suggestions strong {
+                        font-weight: normal;
+                        color: #3399FF;
+                    }
+                    .autocomplete-group {
+                        padding: 2px 5px;
+                    }
+                    .autocomplete-group strong {
+                        display: block;
+                        border-bottom: 1px solid #000;
+                    }
+                    .ajax-file-upload{
+                        cursor:pointer;
+                        width: 100%;
+                        height: 30px;
+                        text-align: center;
+                        top: 2px;
+                        font-size: 10px;
+                        line-height: 23px;
+                    }
+
+                    .ajax-file-upload-green
+                    {
+                        background-color: #188601;
+                        display: inline-block;
+                        color: #fff;
+                        font-size: 12px;
+                        padding: 1px 12px;
+                        cursor: pointer;
+                        margin-right: 5px;
+                        float: right;
+                    }
+
+                    .ajax-upload-dragdrop > span
+                    {
+                        display: none;
+                    }
+
+                    .ajax-file-upload-statusbar{
+                        display: inline;
+                    }
+
+                    .ajax-upload-dragdrop{
+                        padding: 0px 4px 0px 4px;
+                        width: 100%
+                    }
+                    .ajax-upload-dragdrop span:first-of-type{
+                        float: right; margin-top: 5px;
+                    }
+                    .ajax-file-upload-preview{
+                        display: inline;
+                        float: left;
+                    }
+                    .form-sm .ajax-file-upload
+                    {
+                        width: 100%;
+                    }
+                </style>
+                <div class="col-sm-12">
+                    <div class="white-box">
+                        <h3 class="box-title m-b-0"><?=$title?></h3>
+                        <p class="text-muted m-b-30 font-13"> Pastikan semua kolom terisi. </p>
+                        <?php $attributes = array('class'=>'form-horizontal','role'=>'form','autocomplete'=>'off'); echo form_open_multipart('siteman/history_inv',$attributes); ?>
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">Nama alat</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="hidden" id="kode_alat" name="kode_alat">
+                                    <input type="hidden" name="idnya" value="<?=$idnya?>">
+                                    <select class="form-control" name="id_alat" onchange="alat(this.id)" id="id_alat">
+                                        <option value="0">-- Pilih --</option>
+                                        <?php 
+                                            foreach ($alat as $key) {
+                                                $pilih = 'selected';
+                                                if($row['id_alat']==$key['id_alat']){
+                                                    echo "<option value='$key[id_alat]' $pilih>$key[nama_alat]</option>";
+                                                }else{
+                                                    echo "<option value='$key[id_alat]' disabled>$key[nama_alat]</option>";
+                                                }
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="hii" style="display:;">
+                                <label for="example-text-input" class="col-2 col-form-label">Merk</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="text" id="merk" readonly="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row" id="hiii" style="display:;">
+                                <label for="example-text-input" class="col-2 col-form-label">Model/Tipe</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="text" id="model_tipe" readonly="">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">nama distributor</label>
+                                <div class="col-10">
+                                    <select class="form-control readonly" name="id_distributor">
+                                        <option value="">-- Pilih --</option>
+                                        <?php 
+                                            foreach ($distributor as $key) {
+                                                $pilih = 'selected';
+                                                if($row['id_distributor']==$key['id_distributor']){
+                                                    echo "<option value='$key[id_distributor]' $pilih>$key[nama]</option>";
+                                                }else{
+                                                    echo "<option value='$key[id_distributor]' disabled>$key[nama]</option>";
+                                                }
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">lokasi</label>
+                                <div class="col-10">
+                                    <select class="form-control readonly" name="id_lokasi">
+                                        <option value="">-- Pilih --</option>
+                                        <?php 
+                                            foreach ($lokasi as $key) {
+                                                $pilih = 'selected';
+                                                if($row['id_lokasi']==$key['id_lokasi']){
+                                                    echo "<option value='$key[id_lokasi]' $pilih>$key[nama_lokasi]</option>";
+                                                }else{
+                                                    echo "<option value='$key[id_lokasi]' disabled>$key[nama_lokasi]</option>";
+                                                }
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">kondisi</label>
+                                <div class="col-10">
+                                    <select class="form-control readonly" name="id_kondisi">
+                                       <option value="">-- Pilih --</option> 
+                                       <?php 
+                                        foreach ($kondisi as $key) {
+                                            $pilih = 'selected';
+                                            if($row['id_kondisi']==$key['id_kondisi']){
+                                                echo "<option value='$key[id_kondisi]' $pilih>$key[nama_kondisi]</option>";
+                                            }else{
+                                                echo "<option value='$key[id_kondisi]' disabled>$key[nama_kondisi]</option>";
+                                            }
+                                        }
+                                       ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">serial number</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="text" name="sn_alat" value="<?=$row['sn_alat']?>" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">thn. pengadaan</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="text" name="thn_pengadaan" value="<?=$row['thn_pengadaan']?>" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">thn. operasional</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="text" name="thn_operasional" value="<?=$row['thn_operasional']?>" readonly>
+                                </div>
+                            </div>
+
+                            
+
+<!--                             <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">usia teknis</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="text" name="usia_teknis" value="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">harga</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="number" name="harga" value="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">penyusutan</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="text" name="penyusutan" value="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">nilai akumulasi</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="number" name="n_akumulasi" value="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">nilai buku</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="number" name="n_buku" value="">
+                                </div>
+                            </div> -->
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">Operational Book</label>
+                                <div class="col-sm-10">
+                                    <div id='mulitplefileuploader1'>Pilih files</div>
+                                    <div id='status'></div>
+                                    <small class="text-muted">Max (5 MB), Allowed File : pdf,xls,doc,ppt</small>
+                                </div>
+                                <span id="idoprationalbook"></span>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">Manual Book</label>
+                                <div class="col-sm-10">
+                                    <div id='mulitplefileuploader2'>Pilih files</div>
+                                    <div id='status'></div>
+                                    <small class="text-muted">Max (5 MB), Allowed File : pdf,xls,doc,ppt</small>
+                                </div>
+                                <span id="idmanualbook"></span>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">Kalibrasi</label>
+                                <div class="col-sm-10">
+                                    <div id='mulitplefileuploader'>Pilih files</div>
+                                    <div id='status'></div>
+                                    <small class="text-muted">Max (5 MB), Allowed File : pdf,xls,doc,ppt</small>
+                                </div>
+                                <span id="idkalibrasi"></span>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="example-text-input" class="col-2 col-form-label">Kalibrasi</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" name="keluahan"></textarea>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10" name="submit">Laporkan Kerusakan</button>
+                            <a href="<?=base_url().'lap_kerusakan/view_user'?>" class="btn btn-inverse waves-effect waves-light">Batal</a>
+                        <?php echo form_close(); ?>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    $(function() {
+                        var idAlat = $("#id_alat").val();
+                        $.ajax({
+                            url: '<?=base_url().'ajax/getalat'?>',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                'id_alat': idAlat 
+                            },
+                            success: function (alats) {
+                                $("#hii").show();
+                                $("#hiii").show();
+                                $("#merk").val(alats.merk);
+                                $("#kode_alat").val(alats.kode_alat);
+                                $("#model_tipe").val(alats.model_tipe);
                             }
-                    ?>
-                        <tr style="<?= $style ?>">
-                            <td><center><?=$no?></center></td>
-                            <td><?=$row['inisial']?></td>
-                            <td><?=$row['tgl_perencanaan']?></td>
-                            <td><?=$row['tgl_mulai']?></td>
-                            <td><?=$row['status']?></td>
-                            <td><?=$row['masalah']?></td>
-                            <td><?=$row['analisis_kerusakan']?></td>
-                            <td><?=$row['tindak_lanjut']?></td>
-                            <td><?=$row['ket']?></td>
-                        </tr>
-                    <?php
-                        $no++;    # code...
-                        }
-                     ?>
-                </tbody>
-            </table>
-        </div>
+                        });
+                    });
+                    function alat(){
+                        var idAlat = $("#id_alat").val();
+                        $.ajax({
+                            url: '<?=base_url().'ajax/getalat'?>',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                'id_alat': idAlat 
+                            },
+                            success: function (alats) {
+                                $("#hii").show();
+                                $("#hiii").show();
+                                $("#merk").val(alats.merk);
+                                $("#kode_alat").val(alats.kode_alat);
+                                $("#model_tipe").val(alats.model_tipe);
+                            }
+                        });
+                    };
+                </script>
+                <script type="text/javascript">
+                $(document).ready(function(){
+
+                $("#mulitplefileuploader").uploadFile({
+                    url: "<?=base_url()?>inventaris/upload_kalibrasi/",
+                    dragDrop: true,
+                    maxFileCount:1,
+                    multiple: false,
+                    fileName: "upload_kalibrasi",
+                    maxFileSize:5500*1024,
+                    allowedTypes:"pdf,doc,docx,xls,xlsx,ppt,pptx",     
+                    returnType:"json",
+                    dragdropWidth:'auto',
+                    showDone:true,
+                    showDelete:true,
+                    onSuccess: function( files, data, xhr ) {
+                       console.log(data);
+                       $('#idkalibrasi').append('<input type="hidden" name="sts_kalibrasi" value="'+data+'">');
+                    },
+                    deleteCallback: function(data,pd) 
+                    {
+                        for(var i=0;i<data.length;i++) {
+                            var str = data[i];
+                            console.log(str.replace(/[^a-z0-9]/gi, '_'));
+                            $.post("<?=base_url()?>inventaris/delete/",{op:"delete",name:data[i]},
+                            function(resp, textStatus, jqXHR) { 
+                                console.log(data);
+                            });
+                            
+                        }  
+                        console.log(data[0]); 
+                        pd.statusbar.hide();
+                    }
+                });
+
+                });
+
+                $(document).ready(function(){
+
+                $("#mulitplefileuploader1").uploadFile({
+                    url: "<?=base_url()?>inventaris/upload_book_op/",
+                    dragDrop: true,
+                    maxFileCount:1,
+                    multiple: false,
+                    fileName: "upload_book_op",
+                    maxFileSize:5500*1024,
+                    allowedTypes:"pdf,doc,docx,xls,xlsx,ppt,pptx",     
+                    returnType:"json",
+                    dragdropWidth:'auto',
+                    showDone:true,
+                    showDelete:true,
+                    onSuccess: function( files, data, xhr ) {
+                       console.log(data);
+                       $('#idoprationalbook').append('<input type="hidden" name="buku_op" value="'+data+'">');
+                    },
+                    deleteCallback: function(data,pd) 
+                    {
+                        for(var i=0;i<data.length;i++) {
+                            $.post("<?=base_url()?>inventaris/delete/",{op:"delete",name:data[i].replace(/[^a-z0-9]/gi, '_')},
+                            function(resp, textStatus, jqXHR) { 
+                                console.log(data);
+                            });
+                            
+                        }  
+                        console.log(data[0]); 
+                        pd.statusbar.hide();
+                    }
+                });
+
+                });
+
+                $(document).ready(function(){
+
+                $("#mulitplefileuploader2").uploadFile({
+                    url: "<?=base_url()?>inventaris/upload_book_manual/",
+                    dragDrop: true,
+                    maxFileCount:1,
+                    multiple: false,
+                    fileName: "upload_book_manual",
+                    maxFileSize:5500*1024,
+                    allowedTypes:"pdf,doc,docx,xls,xlsx,ppt,pptx",     
+                    returnType:"json",
+                    dragdropWidth:'auto',
+                    showDone:true,
+                    showDelete:true,
+                    onSuccess: function( files, data, xhr ) {
+                       console.log(data);
+                       $('#idmanualbook').append('<input type="hidden" name="buku_manual" value="'+data+'">');
+                    },
+                    deleteCallback: function(data,pd) 
+                    {
+                        for(var i=0;i<data.length;i++) {
+                            $.post("<?=base_url()?>inventaris/delete/",{op:"delete",name:data[i].replace(/[^a-z0-9]/gi, '_')},
+                            function(resp, textStatus, jqXHR) { 
+                                console.log(data);
+                            });
+                            
+                        }  
+                        console.log(data[0]); 
+                        pd.statusbar.hide();
+                    }
+                });
+
+                });
+                </script>
+            </div>
         </div>
     </div>
-</div>
+
+<?php } ?>

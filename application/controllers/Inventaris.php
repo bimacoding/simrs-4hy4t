@@ -200,6 +200,7 @@ class Inventaris extends CI_Controller {
 		$this->load->view('@bima_coding/mod_master_inventaris/cetak',$data);
 	}
 
+
 }
 
 /* End of file Inventaris.php */
